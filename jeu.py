@@ -13,7 +13,7 @@ class Jeu:
         self.ennemis_liste = [] # la liste des ennemis
         self.explosions_liste = [] # la liste des explosions
         
-        pyxel.load("1.pyxres") # le nom du fichier où il doit chercher les dessin
+        pyxel.load("titouan.pyxres") # le nom du fichier où il doit chercher les dessin
          
         pyxel.run(self.update, self.draw)
         
@@ -89,11 +89,12 @@ class Jeu:
     def draw(self): # les dessin
         pyxel.cls(0)
         if self.score > 0:
-           nombre_de_caractere = len(str(self.score))
-           pyxel.text(100 - nombre_de_caractere * 4,5, 'SCORE:'+ str(self.score), 7) # le texte du score
-
+            nombre_de_caractere = len(str(self.score))
+            pyxel.text(115 - nombre_de_caractere * 4,8, ':'+ str(self.score), 7) # le texte du score
+            pyxel.blt(105 - nombre_de_caractere * 4,5, 0, 16, 40, 8, 8)
         if self.vies > 0:
-            pyxel.text(5,5, 'VIES:'+ str(self.vies), 7) # le texte de la vie
+            pyxel.text(15,8, ':'+ str(self.vies), 7)
+            pyxel.blt(5,5, 0, 8, 8, 8, 8) # le texte de la vie
             
             pyxel.blt(self.vaisseau_x, self.vaisseau_y, 0, 0, 0, 8, 8) # le dessin du vaisseau
         
