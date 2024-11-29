@@ -21,13 +21,14 @@ class Jeu:
         self.tirsbonus3_liste = []
         self.bonus_active = False 
         self.coeursbonus_liste = []
+        self.audiogameover = False
         
         pyxel.load("titouan.pyxres") # le nom du fichier où il doit chercher les dessin
          
         pyxel.run(self.update, self.draw)
     
     def coeursbonus_creation(self):
-        if (pyxel.frame_count % 5 == 0): 
+        if (pyxel.frame_count % 2000 == 0): 
             self.coeursbonus_liste.append([random.randint(0, 120),0])
    
     def coeursbonus_deplacement(self):
@@ -60,7 +61,8 @@ class Jeu:
                 if bonus in self.bonus_liste:
                     self.bonus_liste.remove(bonus)
                     self.bonus_active = True
-    
+                    pyxel.play(0, 5)
+
     def tirsbonus_creation(self):
         if  pyxel.btnr(pyxel.MOUSE_BUTTON_LEFT) and self.bonus_active == True:
             self.tirsbonus_liste.append([self.vaisseau_x+4, self.vaisseau_y-4])
@@ -166,6 +168,7 @@ class Jeu:
                         self.tirsbonus_liste.remove(tirsbonus)
                         self.explosions_creation(ennemi[0], ennemi[1])
                         self.score += 1
+                        pyxel.play(0, 6)
                 
                 for tirsbonus in self.tirsbonus2_liste:
                     if ennemi[0] <= tirsbonus[0]+7 and ennemi[0]+12 >= tirsbonus[0] and ennemi[1]+12 >= tirsbonus[1] and ennemi in self.ennemis_liste:    
@@ -173,13 +176,16 @@ class Jeu:
                         self.tirsbonus2_liste.remove(tirsbonus)
                         self.explosions_creation(ennemi[0], ennemi[1])
                         self.score += 1
-                
+                        pyxel.play(0, 6)
+
                 for tirsbonus in self.tirsbonus3_liste:
                     if ennemi[0] <= tirsbonus[0]+7 and ennemi[0]+12 >= tirsbonus[0] and ennemi[1]+12 >= tirsbonus[1] and ennemi in self.ennemis_liste:    
                         self.ennemis_liste.remove(ennemi)
                         self.tirsbonus3_liste.remove(tirsbonus)
                         self.explosions_creation(ennemi[0], ennemi[1])
                         self.score += 1
+                        pyxel.play(0, 6)
+           
             else:
                 for tir in self.tirs_liste:
                     if ennemi[0] <= tir[0]+6 and ennemi[0]+12 >= tir[0] and ennemi[1]+12 >= tir[1]: 
@@ -187,7 +193,8 @@ class Jeu:
                         self.tirs_liste.remove(tir)
                         self.explosions_creation(ennemi[0], ennemi[1])
                         self.score += 1 # quand les ennemis doivent se détruire (quand ils sont touché par un tirs) et prendre plus 1 au score
-                        
+                        pyxel.play(0, 6)
+    
     def explosions_creation(self, x, y):
         self.explosions_liste.append([x, y, 0]) # comment se craient les explosion 
         
@@ -198,6 +205,7 @@ class Jeu:
                 self.explosions_liste.remove(explosion) # animation des explosion  
     
     def update(self):
+        
         self.vaisseau_deplacement()
         self.tirs_creation()
         self.tirs_deplacement()
@@ -221,7 +229,13 @@ class Jeu:
         self.coeursbonus_creation()
         self.coeursbonus_deplacement()
         self.coeursbonus_activation()
-        
+        if pyxel.btnp(pyxel.KEY_Y):
+            pyxel.quit()
+        if self.vies <= 0:
+            if not self.audiogameover:
+                pyxel.play(0, 3) 
+                self.audiogameover = True
+    
     def draw(self): # les dessin
         pyxel.cls(0)
         
@@ -266,7 +280,8 @@ class Jeu:
         
         else:  
             
-            pyxel.text(50,64, 'GAME OVER', 7) # afficher le texte game over à la fin de la partie
-
+            pyxel.text(45,64, 'GAME OVER', 7) # afficher le texte game over à la fin de la partie)
+            
+           
 
 Jeu()
